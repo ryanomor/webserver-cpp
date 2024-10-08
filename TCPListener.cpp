@@ -24,6 +24,15 @@ int TCPListener::init() {
         perror("Failed to listen on socket");
         return -3;
     };
+
+    // Zero master fd
+    FD_ZERO(&l_master);
+
+    // Add listening socket to master fd list
+    // so we can 'hear' incoming connections to it
+    FD_SET(l_socket, &l_master);
+
+    return 0;
 }
 
 int TCPListener::run() {}

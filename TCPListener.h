@@ -29,4 +29,5 @@ class TCPListener {
         int l_port;               // Port # for web service
         int l_socket;             // Listening socket's internal file descriptor
         const char* l_ipAddress;  // IP Address server will run on
+        fd_set l_master;          // Master file descriptor list
 };
