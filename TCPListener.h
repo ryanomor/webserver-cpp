@@ -15,7 +15,7 @@ class TCPListener {
     public:
         // Constructor
         TCPListener(const char* ipAddress, int port):
-            m_ipAddress(ipAddress), m_port(port) {}
+            l_ipAddress(ipAddress), l_port(port) {}
 
         // Initiliaze listener
         int init();
@@ -26,7 +26,7 @@ class TCPListener {
     protected:
 
     private:
-        int m_port;               // Port # for web service
-        int m_socket;             // Listening socket's internal file descriptor
-        const char* m_ipAddress;  // IP Address server will run on
+        int l_port;               // Port # for web service
+        int l_socket;             // Listening socket's internal file descriptor
+        const char* l_ipAddress;  // IP Address server will run on
 };
