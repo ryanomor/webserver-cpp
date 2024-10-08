@@ -1,4 +1,12 @@
 #pragma once
+#pragma comment(lib, "ws2_32.lib")
+
+#include <iostream>
+// #include <WS2tcpip.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <string>
+#include <sstream>
 /**
  * Virtual class actual TCPListener
  * will use definitions from
