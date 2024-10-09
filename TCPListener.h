@@ -4,13 +4,15 @@
 #include <iostream>
 // #include <WS2tcpip.h>
 #include <sys/socket.h>
+#include <sys/_select.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 #include <string>
 #include <sstream>
 /**
  * Virtual class actual TCPListener
  * will use definitions from
- * */ 
+ * */
 class TCPListener {
     public:
         // Constructor
