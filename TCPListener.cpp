@@ -63,9 +63,6 @@ int TCPListener::run() {
                 FD_SET(client, &l_master);
 
                 clientConnect(client);
-
-                // send msg to client
-                sendToClient(client, "Hello", 5);
             } else {
                 // inbound msg
                 char buf[4096]; // hardcode max bytes buffer caan hold
