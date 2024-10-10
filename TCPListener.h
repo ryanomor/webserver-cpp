@@ -26,6 +26,20 @@ class TCPListener {
         int run();
 
     protected:
+        // handler for client connections
+        virtual void clientConnect(int clientSock);
+
+        // handler for client disconnections
+        virtual void clientDisconnect(int clientSock);
+
+        // Handler for receiving a message from the client
+        virtual void onMessageReceived(int clientSock, const char* msg, int msgLen);
+
+        // Send a message to a client
+        void sendToClient(int clientSock, const char* msg, int msgLen);
+
+        // Broadcast a message from a client
+        void broadcastToClients(int sendingClient, const char* msg, int msgLen);
 
     private:
         int l_port;               // Port # for web service

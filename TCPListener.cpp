@@ -61,6 +61,11 @@ int TCPListener::run() {
 
                 // add conn to set of connected clients
                 FD_SET(client, &l_master);
+
+                clientConnect(client);
+
+                // send msg to client
+                sendToClient(client, "Hello", 5);
             } else {
                 // inbound msg
                 char buf[4096]; // hardcode max bytes buffer caan hold
@@ -70,28 +75,30 @@ int TCPListener::run() {
                 int bytesRecv = recv(sock, buf, 4096, 0);
                 if (bytesRecv <= 0) {
                     // Client has dropped conn
-                    // remove from set
+                    clientDisconnect(sock);
                     close(sock);
+                    // remove from set
                     FD_CLR(sock, &l_master);
                 } else {
+                    onMessageReceived(sock, buf, bytesRecv);
                     // Check if msg is aa command
-                    if (buf[0] == '\\') {
-                        // Is cmd quit?
-                        string cmd = string(buf, bytesRecv);
-                        if (cmd == "\\quit") {
-                            running = false;
-                            break;
-                        }
+                    // if (buf[0] == '\\') {
+                    //     // Is cmd quit?
+                    //     string cmd = string(buf, bytesRecv);
+                    //     if (cmd == "\\quit") {
+                    //         running = false;
+                    //         break;
+                    //     }
 
-                    }
+                    // }
 
-                    // SSend msg to all other clients excluding sender (listening sock)
-                    int outSock;
-                    for (int i = 0; i < l_master.fd_count; i++) {
-                        outSock = l_master.fd_array[i];
+                    // // Send msg to all other clients excluding sender (listening sock)
+                    // int outSock;
+                    // for (int i = 0; i < l_master.fd_count; i++) {
+                    //     outSock = l_master.fd_array[i];
 
-                        if (outSock != l_socket && outSock != sock) {}
-                    }
+                    //     if (outSock != l_socket && outSock != sock) {}
+                    // }
                 }
             }
         }
@@ -110,3 +117,26 @@ int TCPListener::run() {
         close(sock);
     }
 }
+
+// handler for client connections
+void TCPListener::sendToClient(int clientSock, const char* msg, int msgLen) {
+    send(clientSock, msg, msgLen, 0);
+}
+
+// handler for client disconnections
+void TCPListener::broadcastToClients(int sendingClient, const char* msg, int msgLen) {
+    int outSock;
+    for (int i = 0; i < l_master.fd_count; i++) {
+        outSock = l_master.fd_array[i];
+
+        if (outSock != l_socket && outSock != sendingClient) {
+            sendToClient(outSock, msg, msgLen);
+        }
+    }
+}
+
+void TCPListener::clientConnect(int clientSock) {}
+
+void TCPListener::clientDisconnect(int clientSock) {}
+
+void TCPListener::onMessageReceived(int clientSock, const char* msg, int msgLen) {}
